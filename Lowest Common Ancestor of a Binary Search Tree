@@ -1,0 +1,35 @@
+Given a binary search tree (BST), find the lowest common ancestor (LCA) node of two given nodes in the BST.
+
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+
+class Solution {
+public:
+    TreeNode* lowestCommonAncestor(TreeNode* root, TreeNode* p, TreeNode* q) {
+        int p_val = p->val;
+        int q_val = q->val;
+        TreeNode *node= root;
+        while(node){
+
+            int  parent_val = node->val;
+            if(p_val > parent_val && q_val > parent_val){
+                node = node->right;
+            }else if(p_val < parent_val && q_val < parent_val){
+                node = node->left;
+            }else{
+                return node;
+            }
+            
+        }
+        return NULL;
+      
+        
+    }
+};
