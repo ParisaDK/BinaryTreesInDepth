@@ -1,0 +1,62 @@
+/**
+ * Problem: Given an m x n 2D binary grid which represents a map of '1's (land) and '0's (water),
+ * return the number of islands. An island is surrounded by water and is formed by connecting
+ * adjacent lands horizontally or vertically. You may assume all four edges of the grid are all
+ * surrounded by water.
+ *
+ * This solution includes queue implementation of BFS to solve the problem:
+ */
+
+class Solution {
+private:
+
+    void bfs(vector<vector<char>>& grid, int r, int c){
+        int nr = grid.size(); //number of rows
+        int nc = grid[0].size(); // number of columns
+        
+        queue<pair<int, int>> queue_bfs;
+        
+        queue_bfs.push({r, c});
+        grid[r][c] = '0';
+        
+        vector<pair<int, int>> directions = {{0, 1}, {1, 0}, {0, -1}, {-1, 0}};
+
+
+        while(!queue_bfs.empty()){
+            
+            auto rc = queue_bfs.front();
+            queue_bfs.pop();
+            
+            int row = rc.first, col = rc.second;
+            
+            for (int i = 0; i < directions.size(); ++i) {
+                int newRow = row + directions[i].first, newCol = col + directions[i].second;
+
+                // Check for valid grid position and if it's land
+                if (newRow >= 0 && newRow < nr && newCol >= 0 && newCol < nc && grid[newRow][newCol] == '1') {
+                    grid[newRow][newCol] = '0'; // Mark as visited
+                    queue_bfs.push({newRow, newCol});
+                }
+        }
+    }
+    }
+
+public:
+
+    int numIslands(vector<vector<char>>& grid) {
+        int nr = grid.size();
+        if(!nr) return 0;
+        int nc = grid[0].size();
+        int num_islands = 0;
+        
+        for(int r = 0; r<nr ; r++){
+            for(int c = 0; c <nc; c++){
+                if(grid[r][c] == '1'){
+                    ++num_islands;
+                    bfs(grid, r, c);
+                }
+            }
+        }
+        return num_islands;
+    }
+};
