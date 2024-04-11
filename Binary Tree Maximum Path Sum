@@ -1,0 +1,50 @@
+/**
+Problem: Given a binary tree, find the maximum sum of any path in the tree. A path is defined as any sequence of nodes from any starting node to any node in the tree along the parent-child connections. The path must contain at least one node and does not need to go through the root.
+
+Approach: We can solve this problem using a recursive depth-first search (DFS). At each node, we calculate two main values:
+1. The maximum gain from either the left or the right child when this node acts as a bridge in the path.
+2. The potential maximum path sum if the current node is considered as the highest point of a path that includes both children.
+
+The challenge is to update the global maximum path sum during the recursion by considering the sum of the node value and the maximum gains from both children, if they are positive.
+**/
+
+
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+ * };
+ */
+class Solution {
+private:
+    int max_sum; // max path sum in a binary sub_tree
+
+    int subTreeGain(TreeNode* root){
+        if(!root) return 0;
+
+        int LeftGain = subTreeGain(root->left);
+        int RightGain = subTreeGain(root->right);
+
+        // making sure they are positive
+        LeftGain = max(LeftGain, 0);
+        RightGain = max(RightGain, 0);
+
+        //updating the result if the splitt at the node root increases the sum
+        max_sum = max(max_sum, LeftGain + RightGain + root->val);
+         // finding the max path without splitiing (considering left and right) at the node and using that for its parent 
+        return root->val + max(LeftGain, RightGain); 
+       
+}
+public:
+
+    int maxPathSum(TreeNode* root) {
+        max_sum = INT_MIN;
+        subTreeGain(root); 
+        return max_sum;
+    }
+};
